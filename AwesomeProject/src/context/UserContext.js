@@ -13,9 +13,11 @@ const UserProvider = ({ children }) => {
 
   const value = {
     ...state,
-    setState: newState => setState({ ...state, ...newState }),
     addOffer: newOffer =>
-      setState({ ...state, myOffers: [...state.myOffers, newOffer] }),
+      setState({
+        ...state,
+        myOffers: [...new Set([...state.myOffers, newOffer])],
+      }),
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

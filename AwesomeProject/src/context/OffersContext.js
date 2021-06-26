@@ -14,7 +14,6 @@ const OffersProvider = ({ children }) => {
 
   const value = {
     ...state,
-    setState: newState => setState({ ...state, ...newState }),
     setOffers: newOffers => setState({ ...state, offers: newOffers }),
     setTags: newTags => setState({ ...state, tags: newTags }),
   };
