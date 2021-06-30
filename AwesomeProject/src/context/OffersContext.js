@@ -14,8 +14,16 @@ const OffersProvider = ({ children }) => {
 
   const value = {
     ...state,
-    setOffers: newOffers => setState({ ...state, offers: newOffers }),
+    setOffers: newOffers =>
+      setState({
+        ...state,
+        offers: newOffers,
+      }),
     setTags: newTags => setState({ ...state, tags: newTags }),
+    setState: newState => {
+      newState.offers.sort((a, b) => !a.promoted - !b.promoted);
+      setState({ ...newState });
+    },
   };
 
   return (

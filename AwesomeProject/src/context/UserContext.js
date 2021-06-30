@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
 const initialState = {
-  myOffers: [],
+  me: null,
 };
 
 const UserContext = createContext({
@@ -13,10 +13,22 @@ const UserProvider = ({ children }) => {
 
   const value = {
     ...state,
-    addOffer: newOffer =>
+    setMyUser: user => setState({ me: user }),
+    addOffer: offerId =>
       setState({
-        ...state,
-        myOffers: [...new Set([...state.myOffers, newOffer])],
+        me: {
+          ...state.me,
+          selectedOffers: [...new Set([...state.me.selectedOffers, offerId])],
+        },
+      }),
+    removeOffer: offerId =>
+      setState({
+        me: {
+          ...state.me,
+          selectedOffers: state.me.selectedOffers.filter(
+            oid => oid !== offerId
+          ),
+        },
       }),
   };
 

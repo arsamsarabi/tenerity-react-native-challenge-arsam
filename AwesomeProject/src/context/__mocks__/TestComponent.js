@@ -1,58 +1,34 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
+import { useFetchInitialData } from '../../hooks';
 import { useUserContext, useOffersContext } from '../';
 
-const propTypes = {
-  offers: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      offerType: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      tagIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-      image: PropTypes.string.isRequired,
-      pirce: PropTypes.shape({
-        raw: PropTypes.number.isRequired,
-        symbol: PropTypes.string.isRequired,
-      }),
-    })
-  ).isRequired,
-  tags: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      text: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
+import offers from './mockOffers';
+import tags from './mockTags';
+import users from './mockUser';
 
-const TestComponent = props => {
-  const { myOffers, addOffer, setState: setUserState } = useUserContext();
-  const {
-    offers,
-    tags,
-    setOffers,
-    setTags,
-    setState: setOffersState,
-  } = useOffersContext();
+const TestComponent = () => {
+  const { me, addOffer, removeOffer, setMyUser } = useUserContext();
+  const { setOffers, setTags, setState: setOfferState } = useOffersContext();
 
   const handleAddOffer = () => {
-    addOffer(props.offers[0].id);
+    addOffer(offers[0].id);
   };
+
+  useEffect(() => {
+    setMyUser(users[0]);
+  }, []);
 
   return (
     <View>
       <TouchableOpacity
         testID="set-offers-button"
-        onPress={() => setOffers(props.offers)}
+        onPress={() => setOffers(offers)}
       >
         Set Offers to state
       </TouchableOpacity>
-      <TouchableOpacity
-        testID="set-tags-button"
-        onPress={() => setTags(props.tags)}
-      >
+      <TouchableOpacity testID="set-tags-button" onPress={() => setTags(tags)}>
         Set tags to state
       </TouchableOpacity>
       <TouchableOpacity testID="add-offer-button" onPress={handleAddOffer}>
@@ -60,8 +36,8 @@ const TestComponent = props => {
       </TouchableOpacity>
 
       <View testID="my-offers-container">
-        {myOffers.length &&
-          myOffers.map(offerId => {
+        {me?.selectedOffers.length &&
+          me?.selectedOffers.map(offerId => {
             return (
               <View testID="my-offer-wrapper" key={`my-offer-${offerId}`}>
                 <Text>{offers.find(o => o.id === offerId).title}</Text>
@@ -99,5 +75,4 @@ const TestComponent = props => {
   );
 };
 
-TestComponent.propTypes = propTypes;
 export default TestComponent;
