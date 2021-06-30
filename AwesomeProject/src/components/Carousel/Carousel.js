@@ -15,6 +15,7 @@ const AppCarousel = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.carouselTitle}>Exclusive Deals!</Text>
+
       <Carousel
         data={offers}
         renderItem={({ item, index }) => (
